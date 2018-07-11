@@ -35,18 +35,6 @@ resource "alicloud_security_group" "security_group" {
   vpc_id      = "${var.vpc_id}"
 }
 
-resource "alicloud_security_group_rule" "allow_all_outbound" {
-  type        = "egress"
-  nic_type    = "intranet"
-  ip_protocol = "tcp"
-  port_range  = "8500/8500"
-  policy      = "accept"
-
-  # cidr_ip           = "0.0.0.0/0"
-  security_group_id        = "${alicloud_security_group.security_group.id}"
-  source_security_group_id = "${alicloud_security_group.security_group.id}"
-}
-
 resource "alicloud_security_group_rule" "allow_api_port" {
   type        = "egress"
   nic_type    = "intranet"

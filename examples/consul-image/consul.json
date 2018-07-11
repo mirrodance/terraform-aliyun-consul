@@ -1,0 +1,42 @@
+{
+  "min_packer_version": "1.0.4",
+  "variables": {
+    "access_key": "{{env `ALICLOUD_ACCESS_KEY`}}",
+    "secret_key": "{{env `ALICLOUD_SECRET_KEY`}}",
+    "region": "cn-hongkong",
+    "consul_version": "1.2.0"
+  },
+  "builders": [{
+    "type":"alicloud-ecs",
+    "access_key":"{{user `access_key`}}",
+    "secret_key":"{{user `secret_key`}}",
+    "region":"{{user `region`}}",
+    "image_name": "consul-{{isotime \"2006-01-02-030405\"}}",
+    "source_image":"ubuntu_16_0402_64_20G_alibase_20180409.vhd",
+    "ssh_username":"root",
+    "instance_type":"ecs.n1.tiny",
+    "io_optimized":"true",
+    "image_force_delete":"true"
+  }],
+  "provisioners": [{
+    "type": "file",
+    "source": "{{template_dir}}/../../../terraform-aliyun-consul",
+    "destination": "/tmp"
+  },{
+    "type": "shell",
+    "inline": [
+      "apt update -y",
+      "apt install -y git",
+      "sudo mkdir -p /opt/gruntwork",
+      "git clone --branch v0.0.3 https://github.com/gruntwork-io/bash-commons.git /tmp/bash-commons",
+      "sudo cp -r /tmp/bash-commons/modules/bash-commons/src /opt/gruntwork/bash-commons"
+    ]
+  },{
+    "type": "shell",
+    "inline": [
+      "/tmp/terraform-aliyun-consul/modules/install-consul/install-consul --version {{user `consul_version`}}",
+      "/tmp/terraform-aliyun-consul/modules/install-dnsmasq/install-dnsmasq"
+    ],
+    "pause_before": "30s"
+  }]
+}

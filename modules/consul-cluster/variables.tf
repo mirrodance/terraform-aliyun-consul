@@ -40,8 +40,7 @@ variable "vswitch_ids" {
 
 variable "allowed_inbound_cidr_blocks_http_api" {
   description = "A list of CIDR-formatted IP address ranges from which the Compute Instances will allow API connections to Consul."
-  type        = "list"
-  default     = ["0.0.0.0/0"]
+  default     = "0.0.0.0/0"
 }
 
 variable "removal_policies" {

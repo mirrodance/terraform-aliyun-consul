@@ -35,8 +35,19 @@ resource "alicloud_security_group" "security_group" {
   vpc_id      = "${var.vpc_id}"
 }
 
-resource "alicloud_security_group_rule" "allow_api_port" {
-  type        = "egress"
+resource "alicloud_security_group_rule" "allow_ssh" {
+  type        = "ingress"
+  nic_type    = "intranet"
+  ip_protocol = "tcp"
+  port_range  = "22/22"
+  policy      = "accept"
+
+  cidr_ip           = "${var.allowed_inbound_cidr_blocks_http_api}"
+  security_group_id = "${alicloud_security_group.security_group.id}"
+}
+
+resource "alicloud_security_group_rule" "allow_ui" {
+  type        = "ingress"
   nic_type    = "intranet"
   ip_protocol = "tcp"
   port_range  = "8500/8500"

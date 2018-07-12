@@ -63,6 +63,13 @@ function generate_consul_config {
 
   instance_zone="dc1"
 
+  if [[ "$server" == "true" ]]; then
+    local cluster_size=""
+
+    cluster_size=3
+    bootstrap_expect_key_val="\"bootstrap_expect\": $cluster_size,"
+  fi
+
   if [[ "$encrypt_key" != "$EMPTY_VAL" ]]; then
     encrypt_key_val="\"encrypt\": \"$encrypt_key\","
   fi
@@ -72,7 +79,7 @@ function generate_consul_config {
 {
   "advertise_addr": "$instance_ip_address",
   "bind_addr": "$instance_ip_address",
-  "bootstrap_expect": 3,
+  $bootstrap_expect_key_val
   "client_addr": "0.0.0.0",
   "datacenter": "$instance_zone",
   "node_name": "$instance_name",

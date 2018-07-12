@@ -6,7 +6,7 @@ This folder contains a [Terraform](https://www.terraform.io/) module to deploy a
 
 This folder defines a [Terraform module](https://www.terraform.io/docs/modules/usage.html), which you can use in your code by adding a `module` configuration and setting its `source` parameter to URL of this folder:
 
-```hcl
+```py
 module "consul_cluster" {
   # Use version v0.0.1 of the consul-cluster module
   source = "github.com/mirrodance/terraform-aliyun-consul//modules/consul-cluster?ref=v0.0.1"
@@ -25,6 +25,8 @@ module "consul_cluster" {
   # ... See variables.tf for the other parameters you must define for the consul-cluster module
 }
 ```
+
+> Aliyun do NOT support `retry-join`, you need to join the cluster manually after the node started.
 
 Note the following parameters:
 
